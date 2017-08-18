@@ -1,18 +1,21 @@
-class GameObject {
-  constructor(sName,baseCost) {
+Computer = {};
+Computer.Hardware = [];
+
+class Hardware {
+  constructor(sName,nCPUConsumption) {
     this.name = sName;
-    this.amount = 0;
-    this.baseCost = baseCost;
+    this.cpuConsumption = nCPUConsumption;
   }
 }
-
+Hardware.prototype.onInstall = function() {
+  return;
+}
 
 // Init:
 Game = {};
+Game.version = "v0.0.1ppa";
 
-Game.version = "v0.0.0ppa";
-Game.Objects = {}
-
-Game.code = 0;
-// Game.
-Game.Objects.Keyboard = new GameObject("Keyboard",10);
+Computer.installHardware = function(x) {
+  Computer.hardware.push(x);
+  x.onInstall();
+}
