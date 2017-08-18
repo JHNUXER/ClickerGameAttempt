@@ -24,7 +24,7 @@ class Drive extends Hardware {
 
 // Init:
 Game = {};
-Game.version = "v0.0.1ppa";
+Game.version = "v0.0.2ppa";
 Game.HardwareById = [
   new Hardware("BasicCPU",-5)
 //   new Drive("Basic Hard Drive",4,1000)
