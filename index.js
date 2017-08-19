@@ -29,7 +29,7 @@ class Drive extends Hardware {
 
 // Init:
 Game = {};
-Game.version = "v0.0.2ppa";
+Game.version = document.getElementById("title").innerText.replace("CPUClicker ","");
 Game.HardwareById = [
   new Hardware("BasicCPU",-5)
 //   new Drive("Basic Hard Drive",4,1000)
