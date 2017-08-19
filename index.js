@@ -1,60 +1,99 @@
-/*
-  Created by JOHNHOGANUKE (AKA JHNUXER)
-*/
-
-
-Images = {}
-Images.CPU0 = "https://raw.githubusercontent.com/GrumpyPirate/sphax-patch-opencomputers/master/size-packs/1.7.10/512x/assets/opencomputers/textures/items/CPU0.png";
-Images.CPU1 = "https://raw.githubusercontent.com/GrumpyPirate/sphax-patch-opencomputers/master/size-packs/1.7.10/512x/assets/opencomputers/textures/items/CPU1.png";
-Images.CPU2 = "https://raw.githubusercontent.com/GrumpyPirate/sphax-patch-opencomputers/master/size-packs/1.7.10/512x/assets/opencomputers/textures/items/CPU0.png";
-
-
-Computer = {};
-Computer.Hardware = [];
-Computer.CPUSpeed = 0;
-Computer.Memory = 1000;
-Computer.PhysicalMemory = 100000;
-
-class Hardware {
-  constructor(sName,nCPUConsumption) {
-    this.name = sName;
-    this.cpuConsumption = nCPUConsumption;
-  }
-}
-Hardware.prototype.onInstall = function() {
-  Computer.CPUSpeed -= this.cpuConsumption;
-  return;
-}
-
-class Drive extends Hardware {
-  constructor(sName,nCPUConsumption,nStorageBytes) {
-    super(sName,nCPUConsumption);
-    this.totalStorage = nStorageBytes;
-    this.avaliableStorage = nStorageBytes;
-  }
-}
-
-// Init:
 Game = {};
-Game.version = document.getElementById("title").innerText.replace("CPUClicker ","");
-Game.HardwareById = [
-  new Hardware("BasicCPU",-5)
-//   new Drive("Basic Hard Drive",4,1000)
+Game.Hardware = {
+  "base":class {
+    constructor(sName,nPowerConsumption) {
+      this.name = sName;
+      this.powerConsumption = nPowerConsumption;
+    }
+  }
+};
+Game.Hardware.base.prototype.onInstall = function() {
+  // var PSU = Computer.getPowerSupply();
+  // if (PSU == null) {
+  //   return false;
+  // } else {
+  //   PSU.connect(this);
+  // }
+  return true;
+}
+Game.Hardware.drive = class extends Game.Hardware.base {
+  constructor(sName,nPC,nCapacity) {
+    super(sName,nPC);
+    this.capacity = {"free":nCapacity,"total":nCapacity};
+  }
+}
+Game.Hardware.memory = class extends Game.Hardware.base {
+  constructor(sName,nPC,nCapacity) {
+    super(sName,nPC);
+    this.capacity = nCapacity;
+  }
+}
+Game.Hardware.processor = class extends Game.Hardware.base {
+  constructor(sName,nPC,nClock,nOverclock) {
+    super(sName,nPC);
+    this.clock = {"speed":nClock,"max":nClock,"over":nOverclock};
+  }
+}
+Game.Hardware.processor.prototype.getOverclockPower = function() {
+  if (this.clock.speed <= this.clock.max) return this.powerConsumption;
+  return ((this.clock.speed - this.clock.max)*0.15)+this.powerConsumption;
+}
+
+Prefixes = [
+  "",
+  "kilo",
+  "Mega",
+  "Giga",
+  "Tera",
+  "Peta",
+  "Exa",
+  "Zetta",
+  "Yotta"
 ];
-Game.Hardware = {};
-for (i = 0; i < Game.HardwareById.length; i++) {
-  Game.Hardware[Game.HardwareById[i].name] = Game.HardwareById[i];
+
+Computer = {}
+Computer.Specs = {};
+Computer.Specs.Memory = 1000;
+Computer.Specs.ClockSpeed = 1;
+Computer.Specs.PhysicalMemory = 100000;
+Computer.Hardware = {};
+Computer.Hardware.ProcessorSlots = [];
+Computer.Hardware.DriveBays = [];
+
+function prefixify(value,unit,full = false) {
+  var pfNdx = 0;
+  while (value > 1000) {
+    value /= 1000;
+    pfNdx++;
+    if (pfNdx > Prefixes.length) {
+      var k = pfNdx - Prefixes.length;
+      pfNdx = Prefixes.length;
+      for (i = 0; i < k; i++) {
+        value *= 1000;
+      }
+      break;
+    }
+  }
+  var prefix = Prefixes[pfNdx];
+  if (!full) {prefix = prefix.charAt(0);}
+  if (!full) {
+    switch (unit) {
+      case "Hertz":
+        unit = "Hz";
+        break;
+      default:
+        unit = unit.charAt(0);
+    }
+  }
+  var rval = value+prefix+unit;
+  if (value > 1) {
+    if (!(rval.endsWith("a") || rval.endsWith("e") || rval.endsWith("i") || rval.endsWith("o") || rval.endsWith("u"))) {rval += "e";}
+    rval += "s";
+  }
+  return rval;
 }
 
 Game.update = function() {
-  var cpu = document.getElementById("cpu");
-  var ram  = document.getElementById("memory");
-  cpu.innerText = ""+Computer.CPUSpeed;
-  ram.innerText = ""+Computer.Memory;
-}
-
-Computer.installHardware = function(x) {
-  Computer.Hardware.push(x);
-  x.onInstall();
-  Game.update();
+  document.getElementById("memory").innerText = prefixify(Computer.Specs.Memory,"Byte");
+  document.getElementById("cpu").innerHTML = prefixify(Computer.Specs.clockSpeed,"Hertz");
 }
