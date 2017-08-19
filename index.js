@@ -71,7 +71,7 @@ Computer.Specs.PhysicalMemory = 100000;
 Computer.Hardware = {};
 Computer.Hardware.ProcessorSlots = [];
 Computer.Hardware.DriveBays = [
-  new Game.Hardware.driveBay("3.5\" Drive Bay",0,3.5);
+  new Game.Hardware.driveBay("3.5\" Drive Bay",0,3.5)
 ];
 Computer.Hardware.DriveBays[0].installed = new Game.Hardware.drive("Basic Hard Drive",2,3.5,100000);
 
