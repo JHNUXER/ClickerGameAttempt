@@ -1,3 +1,7 @@
+/*
+  Created by JOHNHOGANUKE (AKA JHNUXER)
+*/
+
 Computer = {};
 Computer.Hardware = [];
 Computer.CPUSpeed = 0;
@@ -38,3 +42,4 @@ Computer.installHardware = function(x) {
   Computer.hardware.push(x);
   x.onInstall();
 }
+
