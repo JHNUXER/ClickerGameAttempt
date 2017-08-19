@@ -41,7 +41,7 @@ for (i = 0; i < Game.HardwareById.length; i++) {
 
 Game.update = function() {
   var cpu = document.getElementById("cpu");
-  var ram  = document.getEleemntById("memory");
+  var ram  = document.getElementById("memory");
   cpu.innerText = ""+Computer.CPUSpeed;
   ram.innerText = ""+Computer.Memory;
 }
