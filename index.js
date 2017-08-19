@@ -116,6 +116,7 @@ Game.update = function() {
 Computer.installHardware = function(h) {
   if (h instanceof drive) {
     // Computer.Hardware.DriveBays
+    Computer.Specs.PhysicalMemory += drive.capacity;
   }
   h.onInstall;
 }
