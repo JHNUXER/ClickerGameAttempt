@@ -2,6 +2,13 @@
   Created by JOHNHOGANUKE (AKA JHNUXER)
 */
 
+
+Images = {}
+Images.CPU0 = "https://raw.githubusercontent.com/GrumpyPirate/sphax-patch-opencomputers/master/size-packs/1.7.10/512x/assets/opencomputers/textures/items/CPU0.png";
+Images.CPU1 = "https://raw.githubusercontent.com/GrumpyPirate/sphax-patch-opencomputers/master/size-packs/1.7.10/512x/assets/opencomputers/textures/items/CPU1.png";
+Images.CPU2 = "https://raw.githubusercontent.com/GrumpyPirate/sphax-patch-opencomputers/master/size-packs/1.7.10/512x/assets/opencomputers/textures/items/CPU0.png";
+
+
 Computer = {};
 Computer.Hardware = [];
 Computer.CPUSpeed = 0;
