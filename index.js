@@ -6,6 +6,7 @@ Computer = {};
 Computer.Hardware = [];
 Computer.CPUSpeed = 0;
 Computer.Memory = 1000;
+Computer.PhysicalMemory = 100000;
 
 class Hardware {
   constructor(sName,nCPUConsumption) {
@@ -38,8 +39,15 @@ for (i = 0; i < Game.HardwareById.length; i++) {
   Game.Hardware[Game.HardwareById[i].name] = Game.HardwareById[i];
 }
 
-Computer.installHardware = function(x) {
-  Computer.hardware.push(x);
-  x.onInstall();
+Game.update = function() {
+  var cpu = document.getElementById("cpu");
+  var ram  = document.getEleemntById("memory");
+  cpu.innerText = ""+Computer.CPUSpeed;
+  ram.innerText = ""+Computer.Memory;
 }
 
+Computer.installHardware = function(x) {
+  Computer.Hardware.push(x);
+  x.onInstall();
+  Game.update();
+}
