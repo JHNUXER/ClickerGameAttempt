@@ -17,9 +17,10 @@ Game.Hardware.base.prototype.onInstall = function() {
   return true;
 }
 Game.Hardware.drive = class extends Game.Hardware.base {
-  constructor(sName,nPC,nCapacity) {
+  constructor(sName,nPC,nSize,nCapacity) {
     super(sName,nPC);
     this.capacity = {"free":nCapacity,"total":nCapacity};
+    this.size = nSize;
   }
 }
 Game.Hardware.memory = class extends Game.Hardware.base {
@@ -37,6 +38,17 @@ Game.Hardware.processor = class extends Game.Hardware.base {
 Game.Hardware.processor.prototype.getOverclockPower = function() {
   if (this.clock.speed <= this.clock.max) return this.powerConsumption;
   return ((this.clock.speed - this.clock.max)*0.15)+this.powerConsumption;
+}
+Game.Hardware.driveBay = class extends Game.Hardware.base {
+  constructor(sName,nPC,nSize) {
+    super(sName,nPC);
+    this.size = nSize;
+    this.installed = null;
+  }
+}
+Game.Hardware.driveBay.prototype.canInstall = function(drive) {
+  if (drive !instanceof Game.Hardware.drive) {return false;}
+  return (drive.size == this.size) && (this.installed = null);
 }
 
 Prefixes = [
@@ -58,7 +70,10 @@ Computer.Specs.ClockSpeed = 1;
 Computer.Specs.PhysicalMemory = 100000;
 Computer.Hardware = {};
 Computer.Hardware.ProcessorSlots = [];
-Computer.Hardware.DriveBays = [];
+Computer.Hardware.DriveBays = [
+  new Game.Hardware.driveBay("3.5\" Drive Bay",0,3.5);
+];
+Computer.Hardware.DriveBays[0].installed = new Game.Hardware.drive("Basic Hard Drive",2,3.5,100000);
 
 function prefixify(value,unit,full = false) {
   var pfNdx = 0;
@@ -96,4 +111,11 @@ function prefixify(value,unit,full = false) {
 Game.update = function() {
   document.getElementById("memory").innerText = prefixify(Computer.Specs.Memory,"Byte");
   document.getElementById("cpu").innerHTML = prefixify(Computer.Specs.clockSpeed,"Hertz");
+}
+
+Computer.installHardware = function(h) {
+  if (h instanceof drive) {
+    // Computer.Hardware.DriveBays
+  }
+  h.onInstall;
 }
