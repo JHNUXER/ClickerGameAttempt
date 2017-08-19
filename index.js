@@ -47,7 +47,7 @@ Game.Hardware.driveBay = class extends Game.Hardware.base {
   }
 }
 Game.Hardware.driveBay.prototype.canInstall = function(drive) {
-  if (drive !instanceof Game.Hardware.drive) {return false;}
+  if (!(drive instanceof Game.Hardware.drive)) {return false;}
   return (drive.size == this.size) && (this.installed = null);
 }
 
@@ -110,7 +110,8 @@ function prefixify(value,unit,full = false) {
 
 Game.update = function() {
   document.getElementById("memory").innerText = prefixify(Computer.Specs.Memory,"Byte");
-  document.getElementById("cpu").innerHTML = prefixify(Computer.Specs.clockSpeed,"Hertz");
+  document.getElementById("cpu").innerHTML = prefixify(Computer.Specs.ClockSpeed,"Hertz");
+  document.getElementById("physMemory").innerText = prefixify(Computer.Specs.PhysicalMemory,"Byte");
 }
 
 Computer.installHardware = function(h) {
