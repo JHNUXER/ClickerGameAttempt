@@ -75,6 +75,11 @@ Computer.Hardware.DriveBays = [
 ];
 Computer.Hardware.DriveBays[0].installed = new Game.Hardware.drive("Basic Hard Drive",2,3.5,100000);
 
+Game.prices = {};
+
+Game.purchaseHardware = function(hw) {
+}
+
 function prefixify(value,unit,full = false) {
   var pfNdx = 0;
   while (value > 1000) {
