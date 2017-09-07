@@ -1,128 +1,53 @@
-Game = {};
-Game.Hardware = {
-  "base":class {
-    constructor(sName,nPowerConsumption) {
-      this.name = sName;
-      this.powerConsumption = nPowerConsumption;
-    }
-  }
-};
-Game.Hardware.base.prototype.onInstall = function() {
-  // var PSU = Computer.getPowerSupply();
-  // if (PSU == null) {
-  //   return false;
-  // } else {
-  //   PSU.connect(this);
-  // }
-  return true;
+rand = Math.random;
+randr = function(min,max) {
+  return (rand() * (max - min)) + min;
 }
-Game.Hardware.drive = class extends Game.Hardware.base {
-  constructor(sName,nPC,nSize,nCapacity) {
-    super(sName,nPC);
-    this.capacity = {"free":nCapacity,"total":nCapacity};
-    this.size = nSize;
-  }
+round = function(x,n) {
+  return parseInt(x.toFixed(n));
 }
-Game.Hardware.memory = class extends Game.Hardware.base {
-  constructor(sName,nPC,nCapacity) {
-    super(sName,nPC);
-    this.capacity = nCapacity;
-  }
-}
-Game.Hardware.processor = class extends Game.Hardware.base {
-  constructor(sName,nPC,nClock,nOverclock) {
-    super(sName,nPC);
-    this.clock = {"speed":nClock,"max":nClock,"over":nOverclock};
-  }
-}
-Game.Hardware.processor.prototype.getOverclockPower = function() {
-  if (this.clock.speed <= this.clock.max) return this.powerConsumption;
-  return ((this.clock.speed - this.clock.max)*0.15)+this.powerConsumption;
-}
-Game.Hardware.driveBay = class extends Game.Hardware.base {
-  constructor(sName,nPC,nSize) {
-    super(sName,nPC);
-    this.size = nSize;
-    this.installed = null;
-  }
-}
-Game.Hardware.driveBay.prototype.canInstall = function(drive) {
-  if (!(drive instanceof Game.Hardware.drive)) {return false;}
-  return (drive.size == this.size) && (this.installed = null);
+randro = function(min,max,n) {
+  return round(randr(min,max));
 }
 
-Prefixes = [
-  "",
-  "kilo",
-  "Mega",
-  "Giga",
-  "Tera",
-  "Peta",
-  "Exa",
-  "Zetta",
-  "Yotta"
-];
+r10 = function() {return randro(0,10,2);}
+ro10 = r10;
 
-Computer = {}
-Computer.Specs = {};
-Computer.Specs.Memory = 1000;
-Computer.Specs.ClockSpeed = 1;
-Computer.Specs.PhysicalMemory = 100000;
-Computer.Hardware = {};
-Computer.Hardware.ProcessorSlots = [];
-Computer.Hardware.DriveBays = [
-  new Game.Hardware.driveBay("3.5\" Drive Bay",0,3.5)
-];
-Computer.Hardware.DriveBays[0].installed = new Game.Hardware.drive("Basic Hard Drive",2,3.5,100000);
-
-Game.prices = {};
-
-Game.purchaseHardware = function(hw) {
+class Employee {
+  constructor(sName="") {
+    this.name = sName;
+    this.agility = r10();
+    this.efficiency = ro10();
+    this.intelligence = r10();
+    this.stamina = r10();
+    this.strength = r10();
+    this.wisdom = r10();
+  }
 }
 
-function prefixify(value,unit,full = false) {
-  var pfNdx = 0;
-  while (value > 1000) {
-    value /= 1000;
-    pfNdx++;
-    if (pfNdx > Prefixes.length) {
-      var k = pfNdx - Prefixes.length;
-      pfNdx = Prefixes.length;
-      for (i = 0; i < k; i++) {
-        value *= 1000;
-      }
-      break;
-    }
-  }
-  var prefix = Prefixes[pfNdx];
-  if (!full) {prefix = prefix.charAt(0);}
-  if (!full) {
-    switch (unit) {
-      case "Hertz":
-        unit = "Hz";
-        break;
-      default:
-        unit = unit.charAt(0);
-    }
-  }
-  var rval = value+prefix+unit;
-  if (value > 1) {
-    if (!(rval.endsWith("a") || rval.endsWith("e") || rval.endsWith("i") || rval.endsWith("o") || rval.endsWith("u"))) {rval += "e";}
-    rval += "s";
-  }
-  return rval;
+function compileStatsTable(emp) {
+  var s0 = "<table><tbody>";
+  s0 += "<tr><td><b>agility</b></td><td>"+emp.agility+"</td></tr>"
+  s0 += "<tr><td><b>efficiency</b></td><td>"+emp.efficiency+"</td></tr>"
+  s0 += "<tr><td><b>intelligence</b></td><td>"+emp.intelligence+"</td></tr>"
+  s0 += "<tr><td><b>stamina</b></td><td>"+emp.stamina+"</td></tr>"
+  s0 += "<tr><td><b>strength</b></td><td>"+emp.strength+"</td></tr>"
+  s0 += "<tr><td><b>wisdom</b></td><td>"+emp.wisdom+"</td></tr>"
+  s0 += "</tbody></table>";
+  return s0;
 }
 
-Game.update = function() {
-  document.getElementById("memory").innerText = prefixify(Computer.Specs.Memory,"Byte");
-  document.getElementById("cpu").innerHTML = prefixify(Computer.Specs.ClockSpeed,"Hertz");
-  document.getElementById("physMemory").innerText = prefixify(Computer.Specs.PhysicalMemory,"Byte");
-}
-
-Computer.installHardware = function(h) {
-  if (h instanceof drive) {
-    // Computer.Hardware.DriveBays
-    Computer.Specs.PhysicalMemory += drive.capacity;
+class EmployeeTableController {
+  constructor(tTable) {
+    this.table = tTable;
   }
-  h.onInstall;
+
+}
+EmployeeTableController.prototype.addRow = function(empl) {
+  var cols = [empl.name,compileStatsTable(empl),"<font color='red'>$10.00</font>"];
+  var s0 = "<tr>";
+  for (i = 0; i < cols.length; i++) {
+    s0 += "<td>"+cols[i]+"</td>";
+  }
+  s0 += "</tr>";
+  this.table.innerHTML += s0;
 }
