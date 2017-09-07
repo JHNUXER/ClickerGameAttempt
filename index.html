@@ -1,31 +1,16 @@
 <html>
 <head>
-  <title id="title">CPUClicker v0.1.0ppa</title>
+  <title id="title">Employee Simulator</title>
 </head>
 <body>
   <script src="index.js"></script>
-  <div style="width:30%;height:100%;">
-    <table>
-      <tbody>
-        <tr>
-          <td>CPU:</td>
-          <td><span id="cpu">1Hz</span></td>
-        </tr>
-        <tr>
-          <td>Memory:</td>
-          <td><span id="memory">1kB</span></td>
-        </tr>
-        <tr>
-          <td>Physical Memory:</td>
-          <td><span id="physMemory">100kB</span></td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-  <div class="purchase-area">
-    <div class="purchase-area-inner">
-      <button id="cpu.upgrade" onclick="Computer.installHardware(Game.Hardware.BasicCPU)">Upgrade CPU (5Hz) [FREE]</button>
-    </div>
-  </div>
+  <table>
+    <tbody>
+      <tr>
+        <td><table><tbody id="left-table"></tbody></table></td>
+        <td><table><tbody id="right-table"></tbody></table></td>
+      </tr>
+    </tbody>
+  </table>
 </body>
 </html>
