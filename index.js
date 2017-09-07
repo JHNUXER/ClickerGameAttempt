@@ -1,3 +1,24 @@
+emplndx = 0;
+
+tables = {};
+tables.left = document.getElementById("left-table");
+tables.right = document.getElementById("right-table");
+tables.left.list = {};
+tables.right.list = {};
+
+function hire(ndx0) {
+  var k = tables.left.list[ndx0];
+  delete tables.left.list[ndx0];
+  tables.right.list[ndx0] = k;
+  delete k;
+}
+function fire(ndx0) {
+  var k = tables.right.list[ndx0];
+  tables.left.list[ndx0] = k;
+  delete k;
+  delete tables.right.list[ndx0];
+}
+
 rand = Math.random;
 randr = function(min,max) {
   return (rand() * (max - min)) + min;
@@ -21,6 +42,8 @@ class Employee {
     this.stamina = r10();
     this.strength = r10();
     this.wisdom = r10();
+    this.ndx = emplndx;
+    emplndx++;
   }
 }
 
@@ -42,8 +65,8 @@ class EmployeeTableController {
   }
 
 }
-EmployeeTableController.prototype.addRow = function(empl) {
-  var cols = [empl.name,compileStatsTable(empl),"<font color='red'>$10.00</font>"];
+EmployeeTableController.prototype.addRow = function(empl,actionType) {
+  var cols = [empl.name,compileStatsTable(empl),"<font color='red'>$10.00</font>","<button onclick='"+actionType+"("+empl.id+")'>"+actionType+"</button>"];
   var s0 = "<tr>";
   for (i = 0; i < cols.length; i++) {
     s0 += "<td>"+cols[i]+"</td>";
